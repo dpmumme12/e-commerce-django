@@ -1,0 +1,35 @@
+{% extends "auctions/layout.html" %}
+
+{% block body %}
+    <h2 class="list-header">Your Winnings</h2>
+
+    {% for listing in listings %}
+        {% if listing.winner_id == user.id %}
+            <div class="card mb-3" style="width: 100%;">
+                <div class="card-header text-white bg-danger">
+                    Closed Item
+                </div>
+                <div class="row no-gutters">
+                    <div class="col-md-2 text-center">
+                            <img src="{{ listing.item_img }}" class="card-img" alt="..." style="max-height: 280px; width: auto; max-width: 100%;">
+                    </div>
+                <div class="col-md-8">
+                    <div class="card-body">
+                    <h5 class="card-title">{{ listing.item_name }}</h5>
+                    <h6>Your winning bid: ${{ listing.item_price }}</h6>
+                    <p class="card-text">{{ listing.item_description }}</p>
+                    <p class="card-text"><small class="text-muted">Posted {{ listing.date_posted }}</small></p>
+                    <form method="POST" action="{% url 'listing_info' item_id=listing.id %}">
+                        {% csrf_token %}
+                        <div style="text-align: right;">
+                            <button type="submit" class="btn btn-primary">View</button>
+                        </div>
+                    </form>
+                    </div>
+                </div>
+                </div>
+            </div>
+        {% else %}
+        {% endif %}
+    {% endfor %}
+{% endblock %}

@@ -1,0 +1,70 @@
+.header{
+    background-color: lightgray;
+}
+
+.body{
+    padding-left: 10px;
+    padding-right: 10px;
+    padding-bottom: 10px;
+}
+
+.sub-listing-button{
+    text-align: right;
+    margin-right: 25px;
+}
+
+.watchlist-form{
+    padding: 5px;
+    text-align: right;
+}
+
+.listing-left-div{
+    width: 25%;
+}
+
+.listing-right-div{
+    padding-left: 20px;
+    width: 70%;
+    position: relative;
+}
+
+.bid-form{
+    text-align: center;
+}
+
+.comments-div{
+    position: relative;
+    top: auto;
+}
+
+.description-div{
+    max-height: 400px;
+    height: 400px;
+    overflow: hidden;
+}
+
+.comment-button{
+    text-align: right;
+    margin-top: 5px;
+}
+
+.comment-date{
+    text-align: right; 
+}
+
+.cat-search{
+    display: table;
+}
+
+@media all and (max-width:480px) {
+
+    .row {width: 100%; text-align: center; display: block; margin: 0 auto; margin-top: 20px;}
+    .listing-left-div {width: 100%; margin: 0 auto;}
+    .description-div{height: auto; max-height: none; margin-top: 20px;}
+    .listing-right-div{width: 100%;}
+    .watchlist-form{text-align: center;}
+    .comments-div{margin-top: 20px;}
+    .search-button{margin: 0 auto; margin-top: 5px;}
+    .sub-listing-button{margin: 0 auto; text-align: center; margin-top: 20px; width: 80%;}
+    .list-header{text-align: center;}
+  }

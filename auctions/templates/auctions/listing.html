@@ -1,0 +1,221 @@
+{% extends "auctions/layout.html" %}
+
+{% block body %}
+    {% if message %}
+        <div class="alert alert-danger text-center" role="alert">
+            {{ message }}
+        </div>
+    {% else %}
+    {% endif %}
+    <div class="container">
+        {% if listing.status == "Active" %}
+            {% if user.is_authenticated and user.id != listing.user_id and watchlist == None %}
+                <form action="{% url 'watch_list' %}" method="POST">
+                    {% csrf_token %}
+                    <div class="watchlist-form">
+                        <label for="watch-button"><small class="text-muted">Add to watchlist</small></label>
+                        <button type="submit" class="btn btn-primary" id="watch-button" name="item_id" value="{{ listing.id }}">Add</button>
+                    </div>
+                </form>
+            {% elif user.is_authenticated and user.id == listing.user_id %}
+                <form action="{% url 'close_listing' %}" method="POST">
+                    {% csrf_token %}
+                    <div class="watchlist-form">
+                        <input type="hidden" value="{{ highest_bid.username }}" name="winner_username">
+                        <input type="hidden" value="{{ highest_bid.user_id }}" name="winner_id">
+                        <input type="hidden" value="{{ listing.id }}" name="item_id">
+                        <label for="watch-button"><small class="text-muted">Closing the listing will end the auction and declare winner to the highest bidder:</small></label>
+                        <button type="submit" class="btn btn-danger" id="watch-button">Close listing</button>
+                    </div>
+                </form>
+            {% elif user.is_authenticated and user.id != listing.user_id and user.id == watchlist.user_id %}
+                <form action="{% url 'remove_item' %}" method="POST">
+                    {% csrf_token %}
+                    <div class="watchlist-form">
+                        <label for="watch-button"><small class="text-muted">Remove from watchlist</small></label>
+                        <button type="submit" class="btn btn-warning" id="watch-button" name="item_id" value="{{ listing.id }}">Remove</button>
+                    </div>
+                </form>
+            {% else %}
+            <br>
+            {% endif %}
+        {% else %}
+            <div class="alert alert-primary text-center" role="alert">
+                <p>{{ winner.buyer_username }} has been declared the winner with a bid of ${{ highest_bid.bid_amount }}!</p>
+            </div>
+            {% if user.id == watchlist.user_id %}
+                <form action="{% url 'remove_item' %}" method="POST">
+                    {% csrf_token %}
+                    <div class="watchlist-form">
+                        <label for="watch-button"><small class="text-muted">Remove from watchlist</small></label>
+                        <button type="submit" class="btn btn-warning" id="watch-button" name="item_id" value="{{ listing.id }}">Remove</button>
+                    </div>
+                </form>
+            {% else %}
+            {% endif %}
+        {% endif %}
+        <div class="row">
+            <div class="listing-left-div">
+                <img src="{{ listing.item_img }}" class="rounded float-center" alt="..." style=" width: auto; max-width: 100%; height: 300px; object-fit: cover; margin-left: auto; margin-right: auto; display: block;">
+                <h3 style="text-align: center;"> {{ listing.item_name }}</h3>
+                <br>
+                {% if user.is_authenticated and user.id == listing.user_id %}
+                    <h6 style="text-align: center;">Origanl price: ${{ listing.item_price }}</h6>
+                    {% if listing.status == "Active" %}
+                        <h6 style="text-align: center;">Current highest bid: ${{ highest_bid.bid_amount }}</h6>
+                    {% else %}
+                        <h6 style="text-align: center;">Winning bid amount: ${{ highest_bid.bid_amount }}</h6>
+                    {% endif %}
+                    <h6 style="text-align: center;"> Bid history</h6>
+                    <hr>
+                    {% if all_bids == None %}
+                        <p>No bids.</p>
+                    {% else %}
+                        {% for bid in all_bids %}
+                            <div class="card" style="background-color: rgb(231, 230, 230);">
+                                <div class="card-body" style="line-height: 0.7;">
+                                <p class="card-text">{{ bid.username }}: ${{ bid.bid_amount }}</p>
+                                <p class="card-text" style="text-align: right;"><small class="text-muted">{{ bid.bid_date }} UTC</small></p>
+                                </div>
+                            </div>
+                        {% endfor %}
+                    {% endif %}
+                {% elif listing.status == "Active" and user.is_authenticated and user.id != listing.user_id %}
+                    {% if bid_info == None %}
+                        {% if highest_bid == 0 %}
+                            <h6 style="text-align: center;"> Original price: ${{ listing.item_price }}</h6>
+                            <p style="text-align: center;">No bids placed.</p>
+                        {% else %}
+                            <h6 style="text-align: center;">Current highest bid: ${{ highest_bid.bid_amount }}</h6>
+                            <p style="text-align: center;">Original price: ${{ listing.item_price }}</p>
+                        {% endif %}
+                        <form action="{% url 'place_bid' %}" method="POST">
+                            {% csrf_token %}
+                            <div class="bid-form">
+                                <input type="hidden" name="item_id" value="{{ listing.id }}">
+                                <input type="number" class="form-control" id="exampleFormControlInput1" name="amount" placeholder="Amount..." name="price" step=".01" required style="width: 40%; display: inline-block;">
+                                <button type="submit" class="btn btn-primary" id="watch-button" style="margin-bottom: 5px;"><small>Place bid</small></button>
+                            </div>
+                        </form>
+                    {% elif bid_info.user_id == user.id %}
+                        {% if highest_bid == 0 %}
+                            <h6 style="text-align: center;"> Original price: ${{ listing.item_price }}</h6>
+                            <p style="text-align: center;">No bids placed.</p>
+                        {% else %}
+                            <h6 style="text-align: center;">Current highest bid: ${{ highest_bid.bid_amount }}</h6>
+                            <p style="text-align: center;">Original price: ${{ listing.item_price }}</p>
+                        {% endif %}
+                        <p style="text-align: center;"><small class="text_muted"> Your current bid: ${{ bid_info.bid_amount }}</small></p>
+                        <form action="{% url 'place_bid' %}" method="POST">
+                            {% csrf_token %}
+                            <div class="bid-form">
+                                <input type="hidden" name="item_id" value="{{ listing.id }}">
+                                <input type="number" class="form-control" id="exampleFormControlInput1" name="amount" placeholder="Amount..." name="price" step=".01" required style="width: 40%; display: inline-block;">
+                                <button type="submit" class="btn btn-primary" id="watch-button" style="margin-bottom: 5px;"><small>Change bid</small></button>
+                            </div>
+                        </form>
+                    {% else %}
+                        <h6 style="text-align: center;">Price: ${{ listing.item_price }}</h6>
+                    {% endif %}
+                {% else %}
+                    <h6 style="text-align: center;"> Original price: ${{ listing.item_price }}</h6>
+                    <p style="text-align: center;">Auction has ended.</p> 
+                {% endif %}    
+            </div>
+            <div class="listing-right-div">
+                <div class="description-div">
+                    <h2>Description</h2>
+                    <p>{{ listing.item_description }}</p>
+                </div>
+                <div class="comments-div">
+                    <h4>Comments:</h4>
+                    {% if comments != None and user.is_authenticated and listing.status == "Active" %}
+                        {% for comment in comments %}
+                            <div class="card sm-10" style="background-color: rgb(231, 230, 230); width: 100%;">
+                                <div class="row no-gutters">
+                                    <div style="width: 100%;">
+                                        <div class="card-body">
+                                            <h6 class="card-title">{{ comment.username }}:</h6>
+                                            <p class="card-text" style="margin-left: 7%;" >{{ comment.comment }}</p>
+                                            <div class="comment-date">
+                                                <p class="card-text"><small class="text-muted" style="text-align: right;">{{ comment.date }} UTC</small></p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        {% endfor %}
+                            <hr>
+                            <h5>Write a comment:</h5>
+                            <form action="{% url 'create_comment' %}" method="POST">
+                                {% csrf_token %}
+                                <div class="form-group row">
+                                    <div class="col-sm-12">
+                                        <input type="hidden" name="item_id" value="{{ listing.id }}">
+                                        <textarea class="form-control" id="exampleFormControlTextarea1" rows="5" name="comment" placeholder=" Write a comment..."></textarea>
+                                        <div class="comment-button">
+                                            <button type="submit" class="btn btn-primary" id="watch-button">Submit</button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </form>
+                    {% elif comments == None and user.is_authenticated and listing.status == "Active" %}
+                        <h5>Write a comment:</h5>
+                        <form action="{% url 'create_comment' %}" method="POST">
+                            {% csrf_token %}
+                            <div class="form-group row">
+                                <div class="col-sm-12">
+                                    <input type="hidden" name="item_id" value="{{ listing.id }}">
+                                    <textarea class="form-control" id="exampleFormControlTextarea1" rows="5" name="comment" placeholder=" Write a comment..."></textarea>
+                                    <div class="comment-button">
+                                        <button type="submit" class="btn btn-primary" id="watch-button">Submit</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </form>
+                    {% elif listing.status == "Closed" %}
+                        {% if comments != None %}
+                            {% for comment in comments %}
+                                <div class="card sm-10" style="background-color: rgb(231, 230, 230); width: 100%;">
+                                    <div class="row no-gutters">
+                                        <div style="width: 100%;">
+                                            <div class="card-body">
+                                                <h6 class="card-title">{{ comment.username }}:</h6>
+                                                <p class="card-text" style="margin-left: 7%;" >{{ comment.comment }}</p>
+                                                <div class="comment-date">
+                                                    <p class="card-text"><small class="text-muted" style="text-align: right;">{{ comment.date }} UTC</small></p>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            {% endfor %}
+                        {% else %}
+                            <p>No comments...</p>
+                        {% endif %}
+                    {% else %}
+                        {% if comments != None %}
+                            {% for comment in comments %}
+                                <div class="card sm-10" style="background-color: rgb(231, 230, 230); width: 100%;">
+                                    <div class="row no-gutters">
+                                        <div style="width: 100%;">
+                                            <div class="card-body">
+                                                <h6 class="card-title">{{ comment.username }}:</h6>
+                                                <p class="card-text" style="margin-left: 7%;" >{{ comment.comment }}</p>
+                                                <div class="comment-date">
+                                                    <p class="card-text"><small class="text-muted" style="text-align: right;">{{ comment.date }} UTC</small></p>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            {% endfor %}
+                        {% else %}
+                            <p>No comments...</p>
+                        {% endif %}
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}

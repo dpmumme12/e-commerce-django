@@ -1,0 +1,41 @@
+{% extends "auctions/layout.html" %}
+
+{% block body %}
+    <h2 class="list-header">Your Watchlist</h2>
+
+    {% for listing in listings %}
+        {% if listing.id in listing_ids %}
+            <div class="card mb-3" style="width: 100%;">
+                {% if listing.status == "Active" %}
+                    <div class="card-header text-white bg-primary">
+                        {{ listing.status }} Item
+                    </div>
+                {% else %}
+                    <div class="card-header text-white bg-danger">
+                        {{ listing.status }} Item
+                    </div>
+                {% endif %}
+                <div class="row no-gutters">
+                    <div class="col-md-2 text-center">
+                            <img src="{{ listing.item_img }}" class="card-img" alt="..." style="max-height: 280px; width: auto; max-width: 100%;">
+                    </div>
+                <div class="col-md-8">
+                    <div class="card-body">
+                    <h5 class="card-title">{{ listing.item_name }}</h5>
+                    <h6>Price: ${{ listing.item_price }}</h6>
+                    <p class="card-text">{{ listing.item_description }}</p>
+                    <p class="card-text"><small class="text-muted">Posted {{ listing.date_posted }}</small></p>
+                    <form method="POST" action="{% url 'listing_info' item_id=listing.id %}">
+                        {% csrf_token %}
+                        <div style="text-align: right;">
+                            <button type="submit" class="btn btn-primary">View</button>
+                        </div>
+                    </form>
+                    </div>
+                </div>
+                </div>
+            </div>
+        {% else %}
+        {% endif %}
+    {% endfor %}
+{% endblock %}

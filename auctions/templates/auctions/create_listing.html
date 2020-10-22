@@ -1,0 +1,59 @@
+{% extends "auctions/layout.html" %}
+
+{% block body %}
+    {% if message %}
+    <div class="alert alert-primary text-center" role="alert">
+        {{ message }}
+    </div>
+    {% else %}
+    {% endif %}
+    <div class="container">
+        <h2 class="list-header">Create a listing</h2>
+    </div>
+    <div class="container">
+        <form action="{% url 'create_listing' %}" method="POST">
+            {% csrf_token %}
+            <div class="form-group row">
+                <div class="col-sm-4">
+                    <label for="exampleFormControlInput1">Title:</label>
+                    <input type="text" class="form-control" id="exampleFormControlInput1" placeholder="name of the lisiting..." name="title" required>
+                </div>
+            </div>
+            <div class="form-group row">
+                <div class="col-sm-6">
+                    <label for="exampleFormControlInput1">Image (optional):</label>
+                    <input type="text" class="form-control" id="exampleFormControlInput1" placeholder="URL for image..." name="image">
+                </div>
+            </div>
+            <div class="form-group row">
+                <div class="col-sm-9">
+                    <label for="exampleFormControlTextarea1">Description:</label>
+                    <textarea class="form-control" id="exampleFormControlTextarea1" rows="5" name="description" required></textarea>
+                </div>
+            </div>
+            <div class="form-group row">
+                <div class="col-md-3">
+                    <label for="exampleFormControlInput1">Select a category:</label>
+                    <select class="custom-select" id="exampleFormControlInput1" name="category" required>
+                        <option disabled selected hidden>Categories</option>
+                        <option value="Electronics">Electronics</option>
+                        <option value="Motor">Motor</option>
+                        <option value="Home">Home</option>
+                        <option value="Sporting Goods">Sporting Goods</option>
+                        <option value="Fashion">Fashion</option>
+                        <option value="Other">Other</option>
+                    </select>
+                </div>
+            </div>
+            <div class="form-group row">
+                <div class="col-sm-2">
+                    <label for="exampleFormControlInput1">Starting price:</label>
+                    <input type="number" class="form-control" id="exampleFormControlInput1" placeholder="Price..." name="price" step=".01" required>
+                </div>
+            </div>
+            <div class="sub-listing-button">
+                <button type="submit" class="btn btn-primary col-sm-1">Create</button>
+            </div>
+        </form>
+    </div>
+{% endblock %}

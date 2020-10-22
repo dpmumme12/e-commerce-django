@@ -1,0 +1,56 @@
+{% extends "auctions/layout.html" %}
+
+{% block body %}
+    <br>
+    <form action="{% url 'cat_search' %}" method="POST">
+        {% csrf_token %}
+        <div class="form row d-flex justify-content-end" style="margin-right: 10px;">
+            <div class="col-md-2">
+                <select class="custom-select custom-select-sm" name="category">
+                    <option disabled selected hidden>Search Categories</option>
+                    <option value="Electronics">Electronics</option>
+                    <option value="Motor">Motor</option>
+                    <option value="Home">Home</option>
+                    <option value="Sporting Goods">Sporting Goods</option>
+                    <option value="Fashion">Fashion</option>
+                    <option value="Other">Other</option>
+                </select>
+            </div>
+            <div class="search-button">
+                <button class="btn btn-primary custom-select-sm " type="submit">Search</button>
+            </div>
+        </div>
+    </form>
+    <br>
+    <h2 class="list-header">Active Listings</h2>
+
+    {% for listing in listings %}
+        {% if listing.status == "Active" %}
+            <div class="card mb-3" style="width: 100%;">
+                <div class="card-header text-white bg-primary">
+                    {{ listing.status }} Item
+                </div>
+                <div class="row no-gutters">
+                    <div class="col-md-2 text-center">
+                            <img src="{{ listing.item_img }}" class="card-img" alt="..." style="max-height: 280px; width: auto; max-width: 100%;">
+                    </div>
+                <div class="col-md-8">
+                    <div class="card-body">
+                    <h5 class="card-title">{{ listing.item_name }}</h5>
+                    <h6>Price: ${{ listing.item_price }}</h6>
+                    <p class="card-text">{{ listing.item_description }}</p>
+                    <p class="card-text"><small class="text-muted">Posted {{ listing.date_posted }}</small></p>
+                    <form method="POST" action="{% url 'listing_info' item_id=listing.id %}">
+                        {% csrf_token %}
+                        <div style="text-align: right;">
+                            <button type="submit" class="btn btn-primary">View</button>
+                        </div>
+                    </form>
+                    </div>
+                </div>
+                </div>
+            </div>
+        {% else %}
+        {% endif %}
+    {% endfor %}
+{% endblock %}
