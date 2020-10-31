@@ -13,7 +13,7 @@ class listing(models.Model):
     item_price = models.FloatField(default = 1)
     date_posted = models.DateField(auto_now_add = True, blank = True)
     status = models.CharField(default = "Active", max_length = 10)
-    winner_id = models.IntegerField(default = 0)
+    winner_id = models.IntegerField()
     category = models.CharField(max_length = 15, blank = True)
 
 class bid(models.Model):
