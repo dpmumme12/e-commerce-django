@@ -8,7 +8,10 @@ from .models import User, listing, bid, comment, watchlist, sale
 
 
 def index(request):
-    listings = listing.objects.all()
+    try:
+        listings = listing.objects.all()
+    except:
+        listings = 0
     
     return render(request, "auctions/index.html",{
         "listings": listings
