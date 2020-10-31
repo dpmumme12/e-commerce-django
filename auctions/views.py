@@ -11,7 +11,7 @@ def index(request):
     try:
         listings = listing.objects.all()
     except:
-        listings = 0
+        listings = None
     
     return render(request, "auctions/index.html",{
         "listings": listings
