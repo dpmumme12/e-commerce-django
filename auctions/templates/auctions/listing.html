@@ -117,6 +117,8 @@
                     {% else %}
                         <h6 style="text-align: center;">Price: ${{ listing.item_price }}</h6>
                     {% endif %}
+                {% elif not user.is_authenticated %}
+                    <h6 style="text-align: center;"> Original price: ${{ listing.item_price }}</h6>
                 {% else %}
                     <h6 style="text-align: center;"> Original price: ${{ listing.item_price }}</h6>
                     <p style="text-align: center;">Auction has ended.</p> 
