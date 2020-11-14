@@ -8,7 +8,7 @@ class User(AbstractUser):
 class listing(models.Model):
     user_id = models.IntegerField()
     item_name = models.CharField(max_length = 50)
-    item_img = models.URLField(max_length = 500)
+    item_img = models.FileField(upload_to = 'Images')
     item_description = models.TextField()
     item_price = models.FloatField(default = 1)
     date_posted = models.DateField(auto_now_add = True, blank = True)

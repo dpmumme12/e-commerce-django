@@ -79,10 +79,10 @@ def create_listing(request):
         listable.category = request.POST.get("category")
         listable.user_id = request.user.id
 
-        if (request.POST.get("image") == ''):
+        if (request.FILES['image'] == ''):
             listable.item_img = "https://upload.wikimedia.org/wikipedia/commons/thumb/a/ac/No_image_available.svg/1024px-No_image_available.svg.png"
         else:
-            listable.item_img = request.POST.get("image")
+            listable.item_img = request.FILES['image']
 
         listable.save()
 

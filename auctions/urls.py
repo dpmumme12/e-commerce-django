@@ -1,5 +1,6 @@
 from django.urls import path
-
+from django.conf.urls.static import static
+from django.conf import settings
 from . import views
 
 urlpatterns = [
@@ -17,4 +18,4 @@ urlpatterns = [
     path("watchlist_page", views.watchlist_page, name="watchlist_page"),
     path("winnings", views.winnings, name="winnings"),
     path("cat_search", views.cat_search, name="cat_search")
-]
+] + static (settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
