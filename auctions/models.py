@@ -16,7 +16,6 @@ class listing(models.Model):
     status = models.CharField(default = "Active", max_length = 10)
     winner_id = models.IntegerField(default = 0)
     category = models.CharField(max_length = 15, blank = True)
-    File = CloudinaryField('raw')
 
 class bid(models.Model):
     user_id = models.IntegerField()
