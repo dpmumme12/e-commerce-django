@@ -23,4 +23,4 @@ This is a e-commerce site where you can create account to post items for sale an
   - `views.py` - Contains all the views for the app.
 - `commerce` - Project directory.
 
-Demo link https://movie-ratings-scraper.herokuapp.com/
+Demo link https://commerce-for-you.herokuapp.com/
