@@ -11,11 +11,11 @@ https://docs.djangoproject.com/en/3.0/ref/settings/
 """
 
 import os
-#import django_heroku
+import django_heroku
 
-#import cloudinary
-#import cloudinary.uploader
-#import cloudinary.api
+import cloudinary
+import cloudinary.uploader
+import cloudinary.api
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -30,7 +30,7 @@ SECRET_KEY = '6ps8j!crjgrxt34cqbqn7x&b3y%(fny8k8nh21+qa)%ws3fh!q'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['https://commerce-for-you.herokuapp.com/']
 
 
 # Application definition
@@ -126,12 +126,12 @@ USE_TZ = True
 
 STATIC_URL = '/static/'
 
-# Activate Django-Heroku.
-#django_heroku.settings(locals())
+#Activate Django-Heroku.
+django_heroku.settings(locals())
 
 
-#cloudinary.config( 
-  #cloud_name = "didplnazg", 
-  #api_key = "523856664934717", 
-  #api_secret = "ZqI5eNBV-aCJ7tiBgqoTYI7ldeM" 
-#)
+cloudinary.config( 
+  cloud_name = "didplnazg", 
+  api_key = "523856664934717", 
+  api_secret = "ZqI5eNBV-aCJ7tiBgqoTYI7ldeM" 
+)
