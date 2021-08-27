@@ -1,8 +1,11 @@
 from django.contrib.auth import authenticate, login, logout
 from django.db import IntegrityError
 from django.http import HttpResponse, HttpResponseRedirect
+from django.http.response import JsonResponse
 from django.shortcuts import render
 from django.urls import reverse
+import requests
+import json
 
 from .models import User, listing, bid, comment, watchlist, sale
 
@@ -299,3 +302,22 @@ def cat_search(request):
         "listings": listings,
         "category": request.POST.get("category")
         })
+
+def postAPI(request):
+
+    url = "https://localhost:5001/api"
+
+    data = { "id": 9, "UserName": "people" }
+    
+
+
+
+    #data = json.dumps(data)
+
+
+    res = requests.post(url, json=data, verify=False)
+
+    print(res)
+    
+
+    return HttpResponse(res)
