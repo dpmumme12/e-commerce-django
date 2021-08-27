@@ -17,6 +17,5 @@ urlpatterns = [
     path("close_listing", views.close_listing, name="close_listing"),
     path("watchlist_page", views.watchlist_page, name="watchlist_page"),
     path("winnings", views.winnings, name="winnings"),
-    path("cat_search", views.cat_search, name="cat_search"),
-    path("post", views.postAPI, name="API")
+    path("cat_search", views.cat_search, name="cat_search")
 ]
