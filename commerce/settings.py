@@ -130,8 +130,3 @@ STATIC_URL = '/static/'
 django_heroku.settings(locals())
 
 
-cloudinary.config( 
-  cloud_name = "didplnazg", 
-  api_key = "523856664934717", 
-  api_secret = "ZqI5eNBV-aCJ7tiBgqoTYI7ldeM" 
-)
